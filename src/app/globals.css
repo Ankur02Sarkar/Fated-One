@@ -123,3 +123,13 @@
   position: relative;
   z-index: 2;
 }
+
+.feedback-icon {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it stays on top */
+}

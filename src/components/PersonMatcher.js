@@ -167,6 +167,13 @@ const PersonMatcher = () => {
             </>
           )}
           {showConfetti && <Confetti />}
+          <a
+            href="https://www.secretmessage.link/secret/6635492e154e2/"
+            target="_blank"
+            title="Love Confessions ar Khisti gulo ekhane likhben"
+          >
+            <img src="/feedback.png" alt="Feedback" className="feedback-icon" />
+          </a>
         </div>
       </div>
     </div>
