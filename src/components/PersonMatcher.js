@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { AutoComplete, Spin, Image } from "antd";
+import { AutoComplete, Spin, Image, Button } from "antd";
 import Confetti from "react-confetti";
 
 // Embedded data for boys and girls
@@ -66,6 +66,7 @@ const PersonMatcher = () => {
   const [partner, setPartner] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [matched, setMatched] = useState(false);
 
   useEffect(() => {
     const searchResults = [...boys, ...girls].filter((person) =>
@@ -89,45 +90,57 @@ const PersonMatcher = () => {
       setPartner(randomPartner);
       setLoading(false);
       setShowConfetti(true);
+      setMatched(true);
       setTimeout(() => setShowConfetti(false), 5000);
     }, 1500);
   };
 
+  const resetMatcher = () => {
+    setMatched(false);
+    setSelectedPerson(null);
+    setPartner(null);
+    setInput("");
+  };
+
   return (
-    <div>
-      <AutoComplete
-        style={{ width: 200 }}
-        onSearch={setInput}
-        onSelect={onSelect}
-        options={suggestions.map((person) => ({
-          value: person.name,
-          label: person.name,
-          gender: boys.includes(person) ? "boy" : "girl",
-        }))}
-        placeholder="Type a name"
-        filterOption={(inputValue, option) =>
-          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-        }
-      />
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        selectedPerson && (
-          <>
-            <Image
-              width={200}
-              src={selectedPerson.image}
-              alt={selectedPerson.name}
-            />
-            <h3>{selectedPerson.name}</h3>
-            {partner && (
-              <>
-                <Image width={200} src={partner.image} alt={partner.name} />
-                <h3>{partner.name}</h3>
-              </>
-            )}
-          </>
-        )
+    <div className="matcher-container">
+      {!matched && (
+        <>
+          <h2 className="title">Enter a name to find a match:</h2>
+          <AutoComplete
+            style={{ width: 300 }}
+            onSearch={setInput}
+            onSelect={onSelect}
+            options={suggestions.map((person) => ({
+              value: person.name,
+              label: person.name,
+              gender: boys.includes(person) ? "boy" : "girl",
+            }))}
+            placeholder="Type a name"
+          />
+        </>
+      )}
+      {loading && <Spin size="large" />}
+      {!loading && matched && (
+        <>
+          <div className="profiles">
+            <div>
+              <Image
+                width={200}
+                src={selectedPerson.image}
+                alt={selectedPerson.name}
+              />
+              <h3>{selectedPerson.name}</h3>
+            </div>
+            <div>
+              <Image width={200} src={partner.image} alt={partner.name} />
+              <h3>{partner.name}</h3>
+            </div>
+          </div>
+          <Button type="primary" onClick={resetMatcher}>
+            Try Again
+          </Button>
+        </>
       )}
       {showConfetti && <Confetti />}
     </div>
